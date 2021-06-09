@@ -13,6 +13,8 @@ app.engine('ejs', require('ejs').__express);
 
 let flag = 0;
 
+let port = process.env.PORT || 3000;
+
 app.get('/', (req,res) => {
     let user, f;
     if(flag==1) flag+=1;
@@ -184,6 +186,6 @@ app.post('/filter', async (req, res, next) => {
     res.send({all: allSub, mode: subData, ts: a.size, tc: e.size});
 });
 
-app.listen(3000, ()=> {
+app.listen(port, ()=> {
     console.log('Connected');
 });
