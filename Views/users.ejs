@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CF-Meter</title>
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        
+        <style>
+            .fa {
+            font-size: 30px;
+            width: 30px;
+            text-align: center;
+            text-decoration: none !important;
+            border-radius: 50%;
+            }
+            .user-img{
+              max-width: 140px;
+              max-height: 140px;
+            }
+            .fill {
+              object-fit: fill;
+            }
+            .fa-small {
+            font-size: 20px;
+            text-align: center;
+            text-decoration: none !important;
+            border-radius: 50%;
+            }
+        </style>
+    </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;">
+        <!-- Navbar content -->
+        <a class="navbar-brand" href="/">CF-Meter</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about">About me</a>
+            </li>
+          </ul>
+          <span class="navbar-text">
+            <a style="text-decoration: none;" href="https://github.com/shikher25git/CF-Meter"><span class="fa fa-small fa-github"></span>Github Repo</a>
+          </span>
+        </div>
+      </nav>
+
+      <div class="container">
+          <br> <br>
+
+        <% if(typeof(data) != 'undefined'){ %>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="card bg-light">
+                <div class="card-header bg-info"><strong>User Image</strong></div>
+                <div class="card-body" style="width:100%; text-align:center">
+                    <img src="<%= data.titlePhoto%>">
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-sm-6">
+              <div class="card h-100">
+                <div class="card-header bg-warning"><strong>Info & Filters</strong></div>
+                <div class="card-body">
+                  <div class = "row">
+                  <div class="col col-sm-8 text-info">
+                    <strong>Name: </strong> <%= data.firstName%> <%= data.lastName%> <br>
+                    <strong>Handle: </strong> <span id="handle"><%= data.handle%></span> <br>
+                    <strong>Rank: </strong> <%= data.rank%> <br>
+                    <strong>Current Rating: </strong> <%= data.rating%> <br>
+                    <strong>Max Rating: </strong> <%= data.maxRating%> <br>
+                  </div>
+                  <div class = "col col-sm-4">
+                  <h5 class="card-title">Set filters here!</h5>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Set!
+                  </button>
+                </div>
+              </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <br>
+
+
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <form class="form-group" method="POST" onsubmit="return filter();" name="userform" id="userform">
+                <div class="modal-body">
+                    <label>Start date:</label>
+                    <input class="form-control" name="sd" type="date" id="sd">
+                    <br>
+                    <label>End date:</label>
+                    <input type="date" class="form-control" name="ed" id="ed">
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Go</button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        <% } %>
+        <div class="row" id = "11" style = "display: none;">
+          <div class="col-sm-12">
+            <div class="card h-100">
+              <div class="card-header bg-info"><strong>Verdicts and Languages</strong></div>
+              <div class="card-body" >
+                <div class="row">
+                <div class="col col-sm-6">
+                  <canvas id="verdict" style="max-height: 100%; max-width: 100%;"></canvas>
+                </div>
+                <div class="col col-sm-6">
+                    <canvas id="language" style="max-height: 100%; max-width: 100%;"></canvas>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id = "22" style = "display: none;">
+          <div class="col-sm-12">
+            <div class="card h-100">
+              <div class="card-header bg-info"><strong>By Index</strong></div>
+              <div class="card-body">
+                    <canvas id="byind" style="max-height: 100%; max-width: 100%;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" id = "33" style = "display: none;">
+          <div class="col-sm-12">
+            <div class="card h-100">
+              <div class="card-header bg-info"><strong>By Rating</strong></div>
+              <div class="card-body">
+                    <canvas id="byrat" style="max-height: 100%; max-width: 100%;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <hr>
+        <div class="text-center">
+            Created with &#128147; by <a href="https://codeforces.com/profile/shikher25">shikher25</a> &#129299;
+            <br><hr>
+            <a href="https://github.com/shikher25git" class="fa fa-github"></a>
+            &nbsp;
+            <a href="https://www.linkedin.com/in/shikher-sinha-384415179/" class="fa fa-linkedin"></a>
+            &nbsp;
+            <a href="mailto:shikher225112@gmail.com" class="fa fa-envelope"></a>
+            &nbsp;
+        </div>
+        <br>
+      </div>
+      <script type = "text/javascript" src="/chartData.js"></script>
+      <script>
+        document.getElementById('sd').value = "2008-01-01";
+        document.getElementById('ed').value = moment().format('YYYY-MM-DD');
+
+        function validate(){
+          var sd = document.getElementById('sd').value;
+          sd = parseInt((new Date(sd).getTime() / 1000).toFixed(0));
+          var ed = document.getElementById('ed').value;
+          ed = parseInt((new Date(ed).getTime() / 1000).toFixed(0));
+          if(sd<=ed){
+            console.log('a');
+            if(ed<=Date.now()){
+              console.log('b');
+            }
+            else{
+              alert('End date cannot be greater than current date!');
+              return false;
+            }
+          }
+          else{
+            alert('Check dates!');
+            return false;
+          }
+          
+          return true;
+        }
+        function filter(){
+          if(validate()){
+          let form = document.getElementById('userform');
+          let data = {};
+          data.sd = document.getElementById('sd').value;
+          data.ed = document.getElementById('ed').value;
+          data.handle = document.getElementById('handle').innerText;
+          // console.log(data);
+          $.ajax({
+                          url: "/filter",
+                          method: "POST",
+                          data: JSON.stringify(data),
+                          contentType: 'application/JSON',
+                          processData: false,
+                          success: function(response){
+                              upd(response);
+                              
+                          }
+          });}
+          return false;
+        }
+
+        function upd(resp){
+          document.getElementById('11').style.display = 'block';
+          document.getElementById('22').style.display = 'block';
+          document.getElementById('33').style.display = 'block';
+          addData(verdict, Object.keys(resp.all.verdict), Object.values(resp.all.verdict), 0, 0, "aa");
+          addData(language, Object.keys(resp.all.language), Object.values(resp.all.language), 0, 0, "aa"); 
+          addData(index, Object.keys(resp.mode.total.index), Object.values(resp.mode.official.index), 0, 1, "Official"); 
+          addData(index, Object.keys(resp.mode.total.index), Object.values(resp.mode.practice.index), 1, 1, "Practice"); 
+          addData(index, Object.keys(resp.mode.total.index), Object.values(resp.mode.virtual.index), 2, 1, "Virtual"); 
+          addData(rating, Object.keys(resp.mode.total.rating), Object.values(resp.mode.official.rating), 0, 1, "Official");
+          addData(rating, Object.keys(resp.mode.total.rating), Object.values(resp.mode.practice.rating), 1, 1, "Practice"); 
+          addData(rating, Object.keys(resp.mode.total.rating), Object.values(resp.mode.virtual.rating), 2, 1, "Virtual");
+        }
+      </script>
+</body>
+</html>
