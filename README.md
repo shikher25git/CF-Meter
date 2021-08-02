@@ -1,6 +1,6 @@
 # CF-Meter
 
-#Idea <br>
+<strong>Idea</strong> <br>
 Use Codeforces API to sort submission data on various parameters to monitor your progress and match your submission count under various modes with other users to get clear insights and tracks to streamline your progress.
 <ul>
   <li>To run this app on your local device, install Node.js.</li>
